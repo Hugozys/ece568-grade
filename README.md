@@ -10,7 +10,7 @@
   after token entry in the configuration file.
 
   To get your pricate access token, Log into your Duke Gitlab account, go to `User Settings->Access Tokens`
-  Name the application `ece568` and carefully choose the expiration date (End of the semester or class). Then check `api` option in `Scopes` section and click `Create personal access token` to generate the private token. The token will only appear once, so you need to remember it and keep it secretly because any third-party application can be granted with complete read/write access to the API, including all projects and projects on your behalf. So please don't share it with anyone.
+  Name the application `ece568` and carefully choose the expiration date (End of the semester or class). Then check `api` option in `Scopes` section and click `Create personal access token` to generate the private token. The token will only appear once, so you need to remember it and keep it secretly because any third-party application can be granted with complete read/write access to the API, including all projects on your behalf. So please don't share it with anyone.
 
   Copy and paste the token sequence you've been given into the token entry in the configuration file.
 
