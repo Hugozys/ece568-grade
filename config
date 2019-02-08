@@ -2,7 +2,7 @@
 url = https://gitlab.oit.duke.edu/api/v4/projects
 homework = 1
 deadline = 2019-02-06T23:59:59
-token= SECRET
+token= your-secret-token
 
 [GRADE]
-tanums = 5
+tas = Eevee,Yunjing,Nisarg,Alan,Hugo

@@ -6,14 +6,16 @@ import datetime
 import argparse
 import configparser
 import csv
-
+import subprocess
 homework = "" 
 url = ""
+deadline = ""
 my_data= dict() #at least reporter level
-tanums = 0
+tas = list()
 rotation = 0
+
 def is_valid(repo): #filter past gitlab projects
-    p = re.compile('2019.*')
+    p = re.compile(deadline[0:4]+'.*')
     if (p.match(repo['created_at']) != None):
         return True
     return False
@@ -50,7 +52,7 @@ def calc_late_date(repo):
     
 def write_repo(repolst,writer):
     global rotation
-    global tanums
+    global ta
     for repo in repolst:
         if is_valid(repo):
             last_known_activity = repo["last_activity_at"]
@@ -71,8 +73,8 @@ def write_repo(repolst,writer):
                 netid2 = owner
                 pass      
             late_days = calc_late_date(repo)
-            rotation = rotation % tanums + 1
-            writer.writerow({'owner':owner, 'netid1':netid1,'netid2':netid2,'netid3':netid3,'repo':repo["ssh_url_to_repo"],'grader':rotation,'last seen':last_known_activity,'late':late_days})
+            writer.writerow({'owner':owner, 'netid1':netid1,'netid2':netid2,'netid3':netid3,'repo':repo["ssh_url_to_repo"],'grader':tas[rotation],'last seen':last_known_activity,'late':late_days}) #write repo info
+            rotation = (rotation + 1) % len(tas)
             pass
         pass
     pass
@@ -81,11 +83,17 @@ def write_repo(repolst,writer):
 
 
 def crawl():
+    print("retrieving meta information...")
+    res = requests.get(url, my_data)
+    if (res.status_code != 200):
+        print("retrieve submission information failed....")
+        exit()
+        pass
     with open(homework+".csv","w",newline='') as csvfile:
         fieldnames=['owner','netid1', 'netid2','netid3','repo','grader','last seen','late']
         writer = csv.DictWriter(csvfile,fieldnames=fieldnames)
-        writer.writeheader()
-        res = requests.get(url, my_data)
+        writer.writeheader() #write title
+        print("retrieving submission details...")
         for i in range(0, int(res.headers["X-Total-Pages"])): #figure out total pages
             my_data['page'] = i+1 #access current pages
             res = requests.get(url,my_data)
@@ -99,17 +107,17 @@ def filldata(config):
     global url
     global deadline
     global my_data
-    global tanums
+    global tas
     homework = "erss-hwk"+config["SUBMISSION"]["homework"]
     url = config["SUBMISSION"]["url"]
     deadline = config["SUBMISSION"]["deadline"]
     my_data = {'private_token':config["SUBMISSION"]["token"],'search':homework,'min_access_level':20}
-    tanums = int(config["GRADE"]["tanums"])
+    tas = config["GRADE"]["tas"].split(',')
     pass
 
 def check(config):
     if "SUBMISSION" in config and "GRADE" in config:
-        if "url" in config["SUBMISSION"] and "homework" in config["SUBMISSION"] and "deadline" in config["SUBMISSION"] and "token" in config["SUBMISSION"]:
+        if "url" in config["SUBMISSION"] and "homework" in config["SUBMISSION"] and "deadline" in config["SUBMISSION"] and "token" in config["SUBMISSION"] and "tas" in config["GRADE"]:
             return True
         pass
     else:
@@ -119,6 +127,7 @@ def read_config(filepath):
     try:
             config = configparser.ConfigParser()
             config.read(filepath)
+            print("reading configuration...")
             if check(config):
                 filldata(config)
             else:
@@ -132,19 +141,24 @@ def read_config(filepath):
 
 
 
-def process_config():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--config",help="customize configure file path. Default is ./config")
-    args = parser.parse_args()
-    if (args.config):
-        read_config(args.config)
-    else:
-        read_config("./config")
-        pass
+
+#program starts    
+parser = argparse.ArgumentParser()
+parser.add_argument("--config",help="customize configure file path. Default is ./config")
+parser.add_argument("-g",help="specify TA name who are using this program")
+args = parser.parse_args()
+if (args.config):
+    read_config(args.config)
+else:
+    read_config("./config")
+crawl()
+print("Succeed!")
+
+
+if (args.g):
+    print("Clone repositories...")
+    subprocess.run(['./pull.sh',homework+".csv",args.g])
+    print("Done...")
     pass
 
-
-process_config()
-crawl()
-    
 
