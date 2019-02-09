@@ -12,8 +12,7 @@
   To get your pricate access token, Log into your Duke Gitlab account, go to `User Settings->Access Tokens`
   Name the application `ece568` and carefully choose the expiration date (End of the semester or class). Then check `api` option in `Scopes` section and click `Create personal access token` to generate the private token. The token will only appear once, so you need to remember it and keep it secretly because any third-party application can be granted with complete read/write access to the API, including all projects on your behalf. So please don't share it with anyone.
 
-  Copy and paste the token sequence you've been given into the token entry in the configuration file.
-
+  Copy and paste the token sequence you've been given into the token entry in the configuration file. The rest of the configuration keywords are straightforward. Notice that TA names should be separated by comma delimeter without whitespaces. The config file in the repository provides a complete usage example.
 
 # Run
   To run and generate submission details, simply type `./crawler.py`. The crawler will search any configuration file named `config` in the current working directory. You could also have the crawler read a specific configuration file to which you provide by typing `./crawler.py --config <path/to/file>`
