@@ -21,5 +21,5 @@
   If you already have the CSV file generated, you could simply run `./pull.sh <path/to/csv> <Name>` to clone the repositories
 
 # Notes
-  This crawler combined with the bash script in the same repo may help reduce the work for future instructors and TAs teaching this class. Note that this crawler doesn't try to handle every incorrect usage so it may be buggy if not being used correctly. If you found any issue or bug, welcome to bother me.
+  This crawler combined with the bash script in the same repo may help reduce the work for future instructors and TAs teaching this class. Note that this crawler doesn't try to handle every incorrect usage so it may be buggy if not being used correctly. If you found any issue or bug, welcome to launch an issue and I will try to make it more robust.
 
