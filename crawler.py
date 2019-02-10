@@ -21,10 +21,10 @@ def is_valid(repo): #filter past gitlab projects
     return False
 
 def match_netid(repo):
-    pattern= "([a-z]{2,3}\d{2,3})/"+ homework + "-(.*).git" 
+    pattern= "([a-z]{2,3}\d+)/"+ homework + "-(.*).git" 
     m = re.search(pattern,repo["ssh_url_to_repo"])
     if m == None:
-        m = re.search("([a-z]{2,3}\d{2,3}).*.git", repo["ssh_url_to_repo"])
+        m = re.search("([a-z]{2,3}\d+).*.git", repo["ssh_url_to_repo"])
     return m
 
 def get_late_days(late_seconds):
@@ -57,6 +57,7 @@ def write_repo(repolst,writer):
         if is_valid(repo):
             last_known_activity = repo["last_activity_at"]
             id_res = match_netid(repo)
+            #print(id_res.groups())
             owner = id_res.group(1)
             netid1 = "NA"
             netid2 = "NA"
