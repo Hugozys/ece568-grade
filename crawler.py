@@ -64,8 +64,10 @@ def write_repo(repolst,writer):
             netid3 = "NA"
             if (len(id_res.groups()) == 2):
                 member = id_res.group(2).split('-')
+                #print(member)
                 netid1 = member[0]
-                netid2 = member[1]
+                if (len(member) >= 2):
+                    netid2 = member[1]
                 if (len(member) == 3):
                     netid3 = member[2]
                     pass

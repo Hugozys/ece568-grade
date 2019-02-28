@@ -1,7 +1,7 @@
 [SUBMISSION]
 url = https://gitlab.oit.duke.edu/api/v4/projects
-homework = 1
-deadline = 2019-02-06T23:59:59
+homework = 2
+deadline = 2019-02-27T23:59:59
 token= your-secret-token
 
 [GRADE]
